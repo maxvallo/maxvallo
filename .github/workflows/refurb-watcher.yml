@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "17 5-21/2 * * *"   # alle 2 Stunden zwischen ca. 7 und 23 Uhr (MESZ)
   workflow_dispatch:
+    inputs:
+      test_notify:
+        description: "Nur eine Testnachricht senden (nicht crawlen)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,7 +38,12 @@ jobs:
       - run: python -m pytest -q
 
       - name: Crawlen & benachrichtigen
-        run: python -m refurb_watcher run
+        run: |
+          if [ "${{ inputs.test_notify }}" = "true" ]; then
+            python -m refurb_watcher test-notify
+          else
+            python -m refurb_watcher run
+          fi
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

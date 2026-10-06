@@ -41,7 +41,7 @@ Pro Lauf entstehen:
    │ (JSON-Datei)│  Alarm nur einmal je Preisstufe (erneut erst bei weiterem Preisrutsch
    └─────┬───────┘  oder nachdem der Preis zwischenzeitlich über der Grenze lag)
          ▼
-  ntfy / Telegram / E-Mail   +   reports/latest.md   +   Commit ins Repo (Historie)
+  Telegram (ntfy/E-Mail)    +   reports/latest.md   +   Commit ins Repo (Historie)
 ```
 
 Designentscheidungen:
@@ -52,12 +52,16 @@ Designentscheidungen:
 
 ## Einrichten
 
-### 1. Benachrichtigung (ntfy – empfohlen, kostenlos, ohne Account)
-1. App **ntfy** installieren (iOS/Android).
-2. Ein schwer zu erratendes Topic abonnieren, z. B. `maxvallo-refurb-7f3k2`.
-3. Im GitHub-Repo unter *Settings → Secrets and variables → Actions* das Secret `NTFY_TOPIC` mit diesem Namen anlegen.
+### 1. Benachrichtigung per Telegram
+1. In Telegram **@BotFather** öffnen, `/newbot` senden, Namen vergeben (z. B. `Refurb Watcher`, Benutzername muss auf `bot` enden). BotFather antwortet mit dem **Token** (`123456789:AA…`).
+2. Den neuen Bot über den Link von BotFather öffnen und ihm **eine beliebige Nachricht schicken** (sonst darf er dir nicht schreiben).
+3. Im Browser `https://api.telegram.org/bot<TOKEN>/getUpdates` öffnen und bei `"chat":{"id":…}` die Zahl ablesen – das ist die **Chat-ID**.
+4. Im GitHub-Repo unter *Settings → Secrets and variables → Actions → New repository secret* anlegen:
+   - `TELEGRAM_BOT_TOKEN` = Token aus Schritt 1
+   - `TELEGRAM_CHAT_ID` = Zahl aus Schritt 3
+5. Testen: *Actions → refurb-watcher → Run workflow*, Haken bei **„Nur eine Testnachricht senden“** → nach ca. 1 Minute kommt „Refurb-Watcher Test“ in Telegram.
 
-Alternativ/zusätzlich: `TELEGRAM_BOT_TOKEN` + `TELEGRAM_CHAT_ID` oder `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_TO` (Gmail: App-Passwort, Port 587).
+Alternativ/zusätzlich funktionieren ntfy (`NTFY_TOPIC`) und E-Mail (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_TO`; Gmail: App-Passwort, Port 587).
 
 ### 2. Regelmäßig laufen lassen
 Der Workflow `.github/workflows/refurb-watcher.yml` läuft alle 2 Stunden (tagsüber) und committet Bericht + Historie zurück ins Repo. **GitHub führt zeitgesteuerte Workflows nur auf dem Default-Branch (`master`) aus** – der Branch muss also gemergt sein. Manuell starten: *Actions → refurb-watcher → Run workflow*.
@@ -67,7 +71,7 @@ Der Workflow `.github/workflows/refurb-watcher.yml` läuft alle 2 Stunden (tags�
 cd refurb-watcher
 pip install -r requirements-dev.txt
 python -m pytest -q                       # Tests
-NTFY_TOPIC=… python -m refurb_watcher test-notify
+TELEGRAM_BOT_TOKEN=… TELEGRAM_CHAT_ID=… python -m refurb_watcher test-notify
 python -m refurb_watcher run --dry-run    # crawlen ohne Benachrichtigung
 python -m refurb_watcher run --shop refurbed
 python -m refurb_watcher report           # Bericht aus gespeichertem Stand

@@ -173,3 +173,24 @@ def test_cli_run_end_to_end(tmp_path, monkeypatch, capsys):
     report = (tmp_path / "latest.md").read_text(encoding="utf-8")
     assert "969,00 €" in report and "MacBook Air M4" in report
     assert os.path.exists(tmp_path / "state.json")
+
+
+def test_telegram_message_is_html_escaped(monkeypatch):
+    from refurb_watcher import notify
+    calls = []
+
+    class Resp:
+        ok, status_code, text = True, 200, ""
+
+    monkeypatch.setattr(notify.requests, "post", lambda url, json, timeout: calls.append((url, json)) or Resp())
+    for var in ("NTFY_TOPIC", "SMTP_HOST", "MAIL_TO"):
+        monkeypatch.delenv(var, raising=False)
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "123:abc")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
+    assert notify.send("🔔 MacBook <13\">", "Air_M4 *Mitternacht* & mehr",
+                       url="https://x/p/a_b?c=1&d=2", priority="high")
+    url, payload = calls[0]
+    assert url == "https://api.telegram.org/bot123:abc/sendMessage" and payload["chat_id"] == "42"
+    assert payload["parse_mode"] == "HTML"
+    assert "&lt;13&quot;&gt;" in payload["text"] and "&amp; mehr" in payload["text"]
+    assert 'href="https://x/p/a_b?c=1&amp;d=2"' in payload["text"]

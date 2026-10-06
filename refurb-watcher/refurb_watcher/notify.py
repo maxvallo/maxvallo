@@ -1,13 +1,14 @@
 """Benachrichtigungen. Aktiv ist jeder Kanal, dessen Umgebungsvariablen gesetzt sind.
 
-ntfy (empfohlen, App für iOS/Android, kein Account nötig):
+ntfy (App für iOS/Android, kein Account nötig):
     NTFY_TOPIC=mein-geheimes-topic   [NTFY_SERVER=https://ntfy.sh]   [NTFY_TOKEN=...]
-Telegram:
+Telegram (empfohlen, Einrichtung siehe README):
     TELEGRAM_BOT_TOKEN=...  TELEGRAM_CHAT_ID=...
 E-Mail (SMTP, z. B. Gmail mit App-Passwort):
     SMTP_HOST=smtp.gmail.com SMTP_PORT=587 SMTP_USER=... SMTP_PASSWORD=... MAIL_TO=...
 """
 
+import html
 import logging
 import os
 import smtplib
@@ -36,10 +37,14 @@ def _telegram(title: str, body: str, url: str | None):
     token, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     if not (token and chat):
         return False
-    text = f"*{title}*\n{body}" + (f"\n{url}" if url else "")
-    requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
-                  json={"chat_id": chat, "text": text, "parse_mode": "Markdown",
-                        "disable_web_page_preview": False}, timeout=20).raise_for_status()
+    # HTML statt Markdown: Produkttitel/URLs mit _ * [ würden Markdown-Parsing sprengen
+    text = f"<b>{html.escape(title)}</b>\n{html.escape(body)}"
+    if url:
+        text += f'\n<a href="{html.escape(url, quote=True)}">Zum Angebot</a>'
+    r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
+                      json={"chat_id": chat, "text": text, "parse_mode": "HTML"}, timeout=20)
+    if not r.ok:
+        raise RuntimeError(f"Telegram HTTP {r.status_code}: {r.text[:200]}")
     return True
 
 
