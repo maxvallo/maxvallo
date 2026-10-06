@@ -213,3 +213,13 @@ def test_debug_dump(tmp_path, monkeypatch):
     monkeypatch.setenv("DEBUG_HTML_DIR", str(tmp_path))
     _dump("https://x.de/a?b=1", "<html>", 403)
     assert [p.name for p in tmp_path.iterdir()] == ["x_de_a_b_1__403.html"]
+
+
+@pytest.mark.parametrize("title,url,hit", [
+    ('iPad Air 7 (2025) | 11" | 128 GB', "https://www.refurbed.de/p/ipad-air-7-2025-11/307913/", True),
+    ('Apple iPad Air (2025) 11 Zoll 256 GB', "https://x/p/1", True),
+    ('Apple iPad Air (2024) 11 Zoll M2', "https://x/p/1", False),
+    ('iPad Air 7 (2025) | 13" | 128 GB', "https://www.refurbed.de/p/ipad-air-7-2025-13/1/", False),
+])
+def test_ipad_matching_without_chip_name(title, url, hit):
+    assert IPAD.matches(offer(title, url=url)) is hit

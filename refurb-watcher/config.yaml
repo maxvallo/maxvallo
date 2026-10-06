@@ -25,7 +25,8 @@ watches:
     alert_below: 500
     require:
       - ["ipad air"]
-      - ["m3"]
+      # Das iPad Air von 2025 (7. Generation) gibt es nur mit M3
+      - ["m3", "ipad air 7", "re:ipad air\\D{0,15}2025"]
       - ["11"]
     exclude:
       - "ipad pro"
@@ -38,8 +39,8 @@ shops:
     start_urls:
       - https://www.refurbed.de/p/apple-macbook-air-m4-2025/
       - https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/
-      - https://www.refurbed.de/c/ipads/?query=ipad%20air%20m3
-    product_link_regex: '/p/apple-(macbook-air-m4-2025[^/]*|ipad-air[^/]*m3[^/]*)/'
+      - https://www.refurbed.de/p/ipad-air-7-2025-11/
+    product_link_regex: '/p/(apple-macbook-air-m4-2025[^/]*|ipad-air-7-2025-11|apple-ipad-air[^/]*m3[^/]*)/'
     max_product_pages: 40
 
   - id: asgoodasnew
