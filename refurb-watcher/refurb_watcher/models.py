@@ -14,6 +14,7 @@ class Offer:
     sku: str = ""
     seller: str = ""
     price_is_from: bool = False  # "ab X €" (AggregateOffer.lowPrice)
+    available: bool = True  # ausverkaufte Varianten dienen nur zum Finden weiterer Seiten
     extra: list[str] = field(default_factory=list)
 
     @property

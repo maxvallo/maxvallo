@@ -135,8 +135,7 @@ def offers_from_product(node: dict, page_url: str, shop: str, parent_name: str =
             yield from offers_from_product({**node, "offers": nested, "hasVariant": None},
                                            page_url, shop, parent_name)
             continue
-        if any(u in _enum(offer.get("availability")).lower() for u in UNAVAILABLE):
-            continue
+        available = not any(u in _enum(offer.get("availability")).lower() for u in UNAVAILABLE)
         is_from = False
         price = parse_price(offer.get("price"))
         if price is None:
@@ -145,7 +144,9 @@ def offers_from_product(node: dict, page_url: str, shop: str, parent_name: str =
         if price is None and offer.get("lowPrice") is not None:
             price, is_from = parse_price(offer.get("lowPrice")), True
         if not price:
-            continue
+            if available:
+                continue
+            price = 0.0
         offer_name = _text(offer.get("name"))
         yield Offer(
             shop=shop,
@@ -158,6 +159,7 @@ def offers_from_product(node: dict, page_url: str, shop: str, parent_name: str =
             sku=_text(offer.get("sku")) or sku,
             seller=_text(offer.get("seller")),
             price_is_from=is_from,
+            available=available,
             extra=extra,
         )
 
@@ -278,13 +280,16 @@ def extract_meta(soup: BeautifulSoup, page_url: str, shop: str) -> list[Offer]:
 # ------------------------------------------------------------------ Links
 
 def extract_links(soup: BeautifulSoup, page_url: str, pattern: str | None) -> list[str]:
+    """Links aus <a href> und aus Auswahlmenüs (<option value="/p/...">, z. B. Zustand/Farbe)."""
     if not pattern:
         return []
     rx = re.compile(pattern, re.I)
     host = urlparse(page_url).netloc
+    hrefs = [a["href"] for a in soup.find_all("a", href=True)]
+    hrefs += [o["value"] for o in soup.find_all("option", value=True) if o["value"].startswith(("/", "http"))]
     seen, out = set(), []
-    for a in soup.find_all("a", href=True):
-        url = urldefrag(urljoin(page_url, a["href"]))[0]
+    for href in hrefs:
+        url = urldefrag(urljoin(page_url, href))[0]
         if urlparse(url).netloc != host or url in seen:
             continue
         if rx.search(urlparse(url).path):

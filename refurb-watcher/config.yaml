@@ -41,10 +41,25 @@ shops:
       - https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/
       - https://www.refurbed.de/p/ipad-air-7-2025-11/
     product_link_regex: '/p/(apple-macbook-air-m4-2025[^/]*|ipad-air-7-2025-11|apple-ipad-air[^/]*m3[^/]*)/'
-    max_product_pages: 40
+    # Jede Farb-/Speicher-Variante hat eine numerische ID (z. B. /p/…/307979b/), der
+    # Buchstabe dahinter ist der Zustand. Nur Links zu IDs passender Varianten verfolgen:
+    # Startseite -> passende Varianten -> deren Zustands-Seiten.
+    link_id_regex: '/p/[^/]+/(\d+)[a-z]*/'
+    link_ignore_query: true
+    max_depth: 2
+    max_product_pages: 120
+    condition_from_url:
+      - ['/\d+aa/', 'Premium']
+      - ['/\d+b/', 'Sehr gut']
+      - ['/\d+c/', 'Gut']
+      - ['/\d+/', 'Exzellent']
 
+  # asgoodasnew und Back Market blocken Zugriffe von GitHub-Servern (HTTP 403, auch mit
+  # echtem Browser). Auf einem Rechner mit privatem Internetanschluss (z. B. Raspberry Pi)
+  # funktionieren sie evtl. – dafür "enabled: true" setzen.
   - id: asgoodasnew
     name: asgoodasnew
+    enabled: false
     start_urls:
       - https://asgoodasnew.de/search?search=macbook%20air%20m4
       - https://asgoodasnew.de/search?search=ipad%20air%20m3
@@ -54,6 +69,7 @@ shops:
 
   - id: backmarket
     name: Back Market
+    enabled: false
     start_urls:
       - https://www.backmarket.de/de-de/search?q=macbook%20air%20m4
       - https://www.backmarket.de/de-de/search?q=ipad%20air%2011%20m3

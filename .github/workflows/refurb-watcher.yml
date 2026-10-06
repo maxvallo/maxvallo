@@ -2,7 +2,7 @@ name: refurb-watcher
 
 on:
   schedule:
-    - cron: "17 5-21/2 * * *"   # alle 2 Stunden zwischen ca. 7 und 23 Uhr (MESZ)
+    - cron: "17 5-20/3 * * *"   # alle 3 Stunden, ca. 7–22 Uhr (MESZ)
   workflow_dispatch:
     inputs:
       test_notify:
@@ -40,10 +40,14 @@ jobs:
           cache: pip
           cache-dependency-path: refurb-watcher/requirements*.txt
 
-      - run: pip install -r requirements-dev.txt playwright
+      - run: pip install -r requirements-dev.txt
 
-      # Browser für Shops mit Bot-Schutz (asgoodasnew, Back Market)
-      - run: python -m playwright install --with-deps chromium
+      # Browser nur installieren, wenn ein aktiver Shop "fetcher: playwright" nutzt
+      - name: Browser installieren (falls nötig)
+        run: |
+          if python -c "import yaml,sys; c=yaml.safe_load(open('config.yaml')); sys.exit(0 if any(s.get('enabled',True) and s.get('fetcher')=='playwright' for s in c['shops']) else 1)"; then
+            pip install playwright && python -m playwright install --with-deps chromium
+          fi
 
       - run: python -m pytest -q
 

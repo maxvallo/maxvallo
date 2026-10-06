@@ -7,7 +7,7 @@ Beobachtet Refurbished-Shops nach
 | **MacBook Air M4 (2025)**, 13" oder 15", Farbe **Mitternacht** | unter **1.100 €** |
 | **iPad Air 11" M3 (2025)**, beliebige Farbe/Speicher | unter **500 €** |
 
-Shops: **refurbed.de**, **asgoodasnew.de**, **backmarket.de** (optional **rebuy.de**).
+Shops: **refurbed.de** (aktiv). **asgoodasnew.de**, **backmarket.de** und **rebuy.de** sind vorbereitet, aber abgeschaltet – siehe *Stand / Einschränkungen*.
 
 Pro Lauf entstehen:
 - ein **Bericht** `reports/latest.md`: aktuelle Preise (günstigste zuerst), neue Angebote der letzten 7 Tage, Tiefstpreis seit Beobachtung, Änderungen seit dem letzten Lauf;
@@ -17,7 +17,7 @@ Pro Lauf entstehen:
 ## Konzept
 
 ```
- GitHub Actions (alle 2 h)          ┌──────────── config.yaml ────────────┐
+ GitHub Actions (alle 3 h)          ┌──────────── config.yaml ────────────┐
           │                         │ watches: Suchkriterien + Preisgrenze │
           ▼                         │ shops:   Start-URLs + Link-Muster    │
    ┌─────────────┐  HTML            └──────────────────────────────────────┘
@@ -64,7 +64,7 @@ Designentscheidungen:
 Alternativ/zusätzlich funktionieren ntfy (`NTFY_TOPIC`) und E-Mail (`SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD`, `MAIL_TO`; Gmail: App-Passwort, Port 587).
 
 ### 2. Regelmäßig laufen lassen
-Der Workflow `.github/workflows/refurb-watcher.yml` läuft alle 2 Stunden (tagsüber) und committet Bericht + Historie zurück ins Repo. **GitHub führt zeitgesteuerte Workflows nur auf dem Default-Branch (`master`) aus** – der Branch muss also gemergt sein. Manuell starten: *Actions → refurb-watcher → Run workflow*.
+Der Workflow `.github/workflows/refurb-watcher.yml` läuft alle 3 Stunden (ca. 7–22 Uhr) und committet Bericht + Historie zurück ins Repo. **GitHub führt zeitgesteuerte Workflows nur auf dem Default-Branch (`master`) aus** – der Branch muss also gemergt sein. Manuell starten: *Actions → refurb-watcher → Run workflow*.
 
 ### 3. Lokal
 ```bash
@@ -86,9 +86,11 @@ Per Cron (z. B. auf einem Raspberry Pi): `17 7-23/2 * * * cd ~/maxvallo/refurb-w
   python -m refurb_watcher parse seite.html --shop-id refurbed --url https://www.refurbed.de/…
   ```
   Zeigt alle erkannten Angebote (✔ = passt auf eine Suche) und die gefundenen Produktlinks. Danach `start_urls` bzw. `product_link_regex` anpassen.
-- **Back Market** setzt einen starken Bot-Schutz ein und blockt einfache HTTP-Requests (gerade von Cloud-IPs wie GitHub Actions) oft mit HTTP 403. Dann `fetcher: playwright` setzen und im Workflow `pip install playwright && playwright install --with-deps chromium` ergänzen. Klappt es trotzdem nicht, den Shop mit `enabled: false` abschalten.
+- **Debug-Lauf:** *Run workflow* mit Haken bei „Debug“ speichert alle geladenen Seiten im Branch `refurb-watcher-debug` (ohne Benachrichtigung, ohne Commit auf `master`). Die Dateien lassen sich dann mit `parse` auswerten.
+- **refurbed-Besonderheit:** Jede Farb-/Speicher-Variante hat eine ID (`/p/…/307979b/`), der Buchstabe dahinter ist der Zustand (ohne = Exzellent, `aa` = Premium, `b` = Sehr gut, `c` = Gut). Der Crawler folgt von der Startseite nur den Varianten, die zur Suche passen, und von dort den Zustands-Auswahlmenüs (`link_id_regex`, `max_depth: 2`, `condition_from_url` in der Config). So werden ca. 80–100 Seiten pro Lauf geladen statt des ganzen Shops.
 - Bitte die Abfrage-Frequenz moderat lassen (≥ 1 h) und die AGB der Shops respektieren; der Crawler hält sich standardmäßig an `robots.txt`.
 
 ## Stand / Einschränkungen
 
-Der Crawler wurde mit nachgebauten Shop-Seiten getestet (`tests/`), aber **noch nicht live gegen die Shops** – die Entwicklungsumgebung hatte keinen Netzwerkzugriff auf sie. Die refurbed-URLs (`/p/apple-macbook-air-m4-2025/…`) sind real, die Such-URLs der anderen Shops sind nach deren üblichem Schema angenommen. Der erste Lauf (lokal oder per *Run workflow*) zeigt im Bericht pro Shop, wie viele Seiten und Angebote gelesen wurden – bei 0 bitte wie oben beschrieben nachjustieren.
+- **refurbed** funktioniert von GitHub aus (live getestet).
+- **asgoodasnew** und **Back Market** antworten Zugriffen von GitHub-Servern mit HTTP 403 – auch mit echtem Browser (`fetcher: playwright`). Das ist Bot-Schutz gegen Rechenzentrums-IPs. Von einem privaten Internetanschluss aus (z. B. Raspberry Pi per Cron, siehe oben) können sie funktionieren: dort `enabled: true` setzen und `pip install playwright && python -m playwright install chromium` ausführen. Die Such-URLs dieser Shops sind noch nicht live geprüft.
