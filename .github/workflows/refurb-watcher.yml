@@ -9,9 +9,16 @@ on:
         description: "Nur eine Testnachricht senden (nicht crawlen)"
         type: boolean
         default: false
+      debug:
+        description: "Debug: geladene Seiten als Artefakt speichern, nichts committen/benachrichtigen"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+
+env:
+  TZ: Europe/Berlin
 
 concurrency:
   group: refurb-watcher
@@ -33,7 +40,10 @@ jobs:
           cache: pip
           cache-dependency-path: refurb-watcher/requirements*.txt
 
-      - run: pip install -r requirements-dev.txt
+      - run: pip install -r requirements-dev.txt playwright
+
+      # Browser für Shops mit Bot-Schutz (asgoodasnew, Back Market)
+      - run: python -m playwright install --with-deps chromium
 
       - run: python -m pytest -q
 
@@ -41,6 +51,8 @@ jobs:
         run: |
           if [ "${{ inputs.test_notify }}" = "true" ]; then
             python -m refurb_watcher test-notify
+          elif [ "${{ inputs.debug }}" = "true" ]; then
+            DEBUG_HTML_DIR=debug-html python -m refurb_watcher -v run --dry-run
           else
             python -m refurb_watcher run
           fi
@@ -53,8 +65,18 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
 
+      - name: Debug-Seiten hochladen
+        if: always() && inputs.debug
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-html
+          path: |
+            refurb-watcher/debug-html
+            refurb-watcher/reports/latest.md
+          retention-days: 3
+
       - name: Zustand & Bericht committen
-        if: always()
+        if: always() && !inputs.debug
         run: |
           git config user.name "refurb-watcher[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

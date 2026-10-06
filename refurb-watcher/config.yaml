@@ -49,6 +49,7 @@ shops:
       - https://asgoodasnew.de/search?search=ipad%20air%20m3
     product_link_regex: '(macbook-air[^/]*m4|ipad-air[^/]*m3)'
     max_product_pages: 40
+    fetcher: playwright   # blockt einfache HTTP-Clients (HTTP 403)
 
   - id: backmarket
     name: Back Market
@@ -57,9 +58,9 @@ shops:
       - https://www.backmarket.de/de-de/search?q=ipad%20air%2011%20m3
     product_link_regex: '/de-de/p/(macbook-air[^/]*m4|ipad-air[^/]*m3)'
     max_product_pages: 30
-    # Back Market blockt einfache HTTP-Clients häufig. Mit "playwright" wird
-    # ein echter Browser verwendet (pip install playwright; playwright install chromium).
-    fetcher: requests
+    # Back Market blockt einfache HTTP-Clients (HTTP 403) -> echter Browser
+    # (pip install playwright; python -m playwright install chromium)
+    fetcher: playwright
 
   - id: rebuy
     name: rebuy

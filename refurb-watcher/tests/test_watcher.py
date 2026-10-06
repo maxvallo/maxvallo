@@ -194,3 +194,22 @@ def test_telegram_message_is_html_escaped(monkeypatch):
     assert payload["parse_mode"] == "HTML"
     assert "&lt;13&quot;&gt;" in payload["text"] and "&amp; mehr" in payload["text"]
     assert 'href="https://x/p/a_b?c=1&amp;d=2"' in payload["text"]
+
+
+def test_report_escapes_pipes_in_table(tmp_path):
+    from refurb_watcher.report import build_report
+    store = Store(str(tmp_path / "s.json"))
+    o = offer('Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB', 1293.75, sku="X")
+    store.apply("2026-01-01T00:00:00+00:00", [(MAC, o)], {"t"})
+    row = next(l for l in build_report(store, [MAC]).splitlines() if l.startswith("| 1.293,75"))
+    assert "2025 \\| 13.6\" \\| M4" in row
+    assert len(row.replace("\\|", "").split("|")) == 6  # 4 Spalten
+
+
+def test_debug_dump(tmp_path, monkeypatch):
+    from refurb_watcher.fetch import _dump
+    _dump("https://x.de/a?b=1", "<html>", 200)
+    assert not list(tmp_path.iterdir())
+    monkeypatch.setenv("DEBUG_HTML_DIR", str(tmp_path))
+    _dump("https://x.de/a?b=1", "<html>", 403)
+    assert [p.name for p in tmp_path.iterdir()] == ["x_de_a_b_1__403.html"]
