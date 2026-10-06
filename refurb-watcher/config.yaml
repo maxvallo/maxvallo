@@ -95,7 +95,7 @@ settings:
   delay_seconds: [2, 5]
   timeout_seconds: 25
   respect_robots_txt: true
-  # Zusätzlich zu Preisalarmen eine Push-Nachricht bei neuen Angeboten?
-  notify_new_offers: true
+  # Zusätzlich zu Preisalarmen eine Sammelnachricht bei neuen Angeboten? (aus: nur Preisalarme)
+  notify_new_offers: false
   # Angebote, die so viele Läufe in Folge fehlen, gelten als verschwunden.
   gone_after_missed_runs: 2
