@@ -1,0 +1,104 @@
+{
+ "offers": {
+  "macbook-air-m4::refurbed|307979|RefurbishedCondition|Mitternacht|": {
+   "active": true,
+   "color": "Mitternacht",
+   "condition": "RefurbishedCondition",
+   "first_seen": "2026-10-06T18:24:14+00:00",
+   "history": [
+    [
+     "2026-10-06T18:24:14+00:00",
+     1293.75
+    ]
+   ],
+   "last_alert_price": null,
+   "last_seen": "2026-10-06T18:24:14+00:00",
+   "min_price": 1293.75,
+   "missed": 0,
+   "price": 1293.75,
+   "price_is_from": false,
+   "seller": "",
+   "shop": "refurbed",
+   "title": "Apple MacBook Air 2025 | 13.6\" | M4 - Mitternacht 256 GB",
+   "url": "https://www.refurbed.de/p/apple-macbook-air-m4-2025/307979b/?offer=21281366",
+   "watch": "macbook-air-m4"
+  },
+  "macbook-air-m4::refurbed|308038|RefurbishedCondition|Mitternacht|": {
+   "active": true,
+   "color": "Mitternacht",
+   "condition": "RefurbishedCondition",
+   "first_seen": "2026-10-06T18:24:14+00:00",
+   "history": [
+    [
+     "2026-10-06T18:24:14+00:00",
+     1459.0
+    ]
+   ],
+   "last_alert_price": null,
+   "last_seen": "2026-10-06T18:24:14+00:00",
+   "min_price": 1459.0,
+   "missed": 0,
+   "price": 1459.0,
+   "price_is_from": false,
+   "seller": "",
+   "shop": "refurbed",
+   "title": "Apple MacBook Air 2025 | 13.6\" | M4 - Mitternacht 512 GB",
+   "url": "https://www.refurbed.de/p/apple-macbook-air-m4-2025/308038b/?offer=14850674",
+   "watch": "macbook-air-m4"
+  },
+  "macbook-air-m4::refurbed|308065|RefurbishedCondition|Mitternacht|": {
+   "active": true,
+   "color": "Mitternacht",
+   "condition": "RefurbishedCondition",
+   "first_seen": "2026-10-06T18:24:14+00:00",
+   "history": [
+    [
+     "2026-10-06T18:24:14+00:00",
+     1453.86
+    ]
+   ],
+   "last_alert_price": null,
+   "last_seen": "2026-10-06T18:24:14+00:00",
+   "min_price": 1453.86,
+   "missed": 0,
+   "price": 1453.86,
+   "price_is_from": false,
+   "seller": "",
+   "shop": "refurbed",
+   "title": "Apple MacBook Air 2025 | 13.6\" | M4 - Mitternacht 1000 GB",
+   "url": "https://www.refurbed.de/p/apple-macbook-air-m4-2025/308065c/?offer=21392522",
+   "watch": "macbook-air-m4"
+  }
+ },
+ "runs": [
+  {
+   "shops": {
+    "asgoodasnew": {
+     "complete": false,
+     "errors": [
+      "https://asgoodasnew.de/search?search=macbook%20air%20m4: HTTP 403",
+      "https://asgoodasnew.de/search?search=ipad%20air%20m3: HTTP 403"
+     ],
+     "offers": 0,
+     "pages": 0
+    },
+    "backmarket": {
+     "complete": false,
+     "errors": [
+      "https://www.backmarket.de/de-de/search?q=macbook%20air%20m4: HTTP 403",
+      "https://www.backmarket.de/de-de/search?q=ipad%20air%2011%20m3: HTTP 403"
+     ],
+     "offers": 0,
+     "pages": 0
+    },
+    "refurbed": {
+     "complete": true,
+     "errors": [],
+     "offers": 10,
+     "pages": 3
+    }
+   },
+   "ts": "2026-10-06T18:24:14+00:00"
+  }
+ ]
+}
