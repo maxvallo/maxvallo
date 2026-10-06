@@ -65,15 +65,16 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
 
-      - name: Debug-Seiten hochladen
+      - name: Debug-Seiten im Branch refurb-watcher-debug ablegen
         if: always() && inputs.debug
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-html
-          path: |
-            refurb-watcher/debug-html
-            refurb-watcher/reports/latest.md
-          retention-days: 3
+        run: |
+          cp reports/latest.md debug-html/ 2>/dev/null || true
+          cd debug-html
+          git init -q -b refurb-watcher-debug
+          git add .
+          git -c user.name="refurb-watcher[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Debug-Seiten $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" refurb-watcher-debug
 
       - name: Zustand & Bericht committen
         if: always() && !inputs.debug
