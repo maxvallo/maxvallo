@@ -43,7 +43,7 @@ def build_report(store: Store, watches: list[Watch], events: list[Event] | None 
     if last_run:
         lines += ["| Shop | Seiten | Angebote gelesen | Status |", "|---|---|---|---|"]
         for shop, st in last_run["shops"].items():
-            status = "✅" if st.get("complete") else ("⚠️ " + "; ".join(st.get("errors", []))[:200])
+            status = "✅" if st.get("complete") else ("⚠️ " + "; ".join(st.get("errors", []))[:200]).replace("|", "\\|")
             lines.append(f"| {shop} | {st['pages']} | {st['offers']} | {status} |")
         lines.append("")
 
@@ -62,7 +62,8 @@ def build_report(store: Store, watches: list[Watch], events: list[Event] | None 
             for e in active[:15]:
                 flag = " 🔔" if w.alert_below and e["price"] < w.alert_below else ""
                 since = _parse(e["first_seen"]).astimezone().strftime("%d.%m.")
-                lines.append(f"| {price_str(e)}{flag} | {e['shop']} | [{describe(e)}]({e['url']}) | {since} |")
+                cell = describe(e).replace("|", "\\|")
+                lines.append(f"| {price_str(e)}{flag} | {e['shop']} | [{cell}]({e['url']}) | {since} |")
             lines.append("")
         recent = sorted((e for e in entries if _parse(e["first_seen"]) > now - timedelta(days=days_new)),
                         key=lambda e: e["first_seen"], reverse=True)

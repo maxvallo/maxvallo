@@ -62,14 +62,15 @@ def test_jsonld_product_group():
     url = "https://www.refurbed.de/p/apple-macbook-air-m4-2025/"
     offers, links = extract_page(fixture("product_jsonld.html"), url, "refurbed",
                                  CONFIG["shops"][0]["product_link_regex"])
-    by_sku = {o.sku: o for o in offers}
-    assert set(by_sku) == {"307995b", "308115", "307979c"}  # ausverkaufte Variante fehlt
+    by_sku = {o.sku: o for o in offers if o.available}
+    assert set(by_sku) == {"307995b", "308115", "307979c"}
+    assert [(o.sku, o.price) for o in offers if not o.available] == [("309000", 1050.0)]
     a = by_sku["307995b"]
     assert a.price == 969.0 and a.condition == "RefurbishedCondition" and a.seller == "Händler A"
     assert a.url == "https://www.refurbed.de/p/apple-macbook-air-m4-2025/307995b/"
     assert "MacBook Air M4" in a.title and "Mitternacht" in a.title
     assert by_sku["308115"].price == 1129.0
-    assert [o.sku for o in offers if MAC.matches(o)] == ["307995b", "308115"]
+    assert [o.sku for o in offers if MAC.matches(o) and o.available] == ["307995b", "308115"]
     assert links == ["https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/308544b/"]
 
 
@@ -194,3 +195,85 @@ def test_telegram_message_is_html_escaped(monkeypatch):
     assert payload["parse_mode"] == "HTML"
     assert "&lt;13&quot;&gt;" in payload["text"] and "&amp; mehr" in payload["text"]
     assert 'href="https://x/p/a_b?c=1&amp;d=2"' in payload["text"]
+
+
+def test_report_escapes_pipes_in_table(tmp_path):
+    from refurb_watcher.report import build_report
+    store = Store(str(tmp_path / "s.json"))
+    o = offer('Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB', 1293.75, sku="X")
+    store.apply("2026-01-01T00:00:00+00:00", [(MAC, o)], {"t"})
+    row = next(l for l in build_report(store, [MAC]).splitlines() if l.startswith("| 1.293,75"))
+    assert "2025 \\| 13.6\" \\| M4" in row
+    assert len(row.replace("\\|", "").split("|")) == 6  # 4 Spalten
+
+
+def test_debug_dump(tmp_path, monkeypatch):
+    from refurb_watcher.fetch import _dump
+    _dump("https://x.de/a?b=1", "<html>", 200)
+    assert not list(tmp_path.iterdir())
+    monkeypatch.setenv("DEBUG_HTML_DIR", str(tmp_path))
+    _dump("https://x.de/a?b=1", "<html>", 403)
+    assert [p.name for p in tmp_path.iterdir()] == ["x_de_a_b_1__403.html"]
+
+
+@pytest.mark.parametrize("title,url,hit", [
+    ('iPad Air 7 (2025) | 11" | 128 GB', "https://www.refurbed.de/p/ipad-air-7-2025-11/307913/", True),
+    ('Apple iPad Air (2025) 11 Zoll 256 GB', "https://x/p/1", True),
+    ('Apple iPad Air (2024) 11 Zoll M2', "https://x/p/1", False),
+    ('iPad Air 7 (2025) | 13" | 128 GB', "https://www.refurbed.de/p/ipad-air-7-2025-13/1/", False),
+])
+def test_ipad_matching_without_chip_name(title, url, hit):
+    assert IPAD.matches(offer(title, url=url)) is hit
+
+
+def _variant_page(skus_prices, current, options):
+    """Nachbau einer refurbed-Produktseite: ProductGroup + Zustands-Auswahl."""
+    import json
+    variants = [{"@type": "Product", "sku": sku, "name": f"Apple MacBook Air 2025 | 13.6\" | M4 - {color} 256 GB",
+                 "color": color, "offers": {"@type": "Offer", "url": f"/p/apple-macbook-air-m4-2025/{path}/?offer=1",
+                                            "price": price, "availability": avail}}
+                for sku, color, path, price, avail in skus_prices]
+    ld = {"@context": "https://schema.org", "@type": "ProductGroup", "name": "MacBook Air", "hasVariant": variants}
+    opts = "".join(f'<option value="/p/apple-macbook-air-m4-2025/{o}/?offer=9">x</option>' for o in options)
+    return (f'<html><head><script type="application/ld+json">{json.dumps(ld)}</script></head>'
+            f'<body><select id="product-grade">{opts}</select></body></html>')
+
+
+def test_crawl_follows_only_matching_variants_and_conditions():
+    base = "https://www.refurbed.de/p/apple-macbook-air-m4-2025/"
+    shop = {"id": "refurbed", "start_urls": [base], "max_depth": 2, "max_product_pages": 50,
+            "product_link_regex": CONFIG["shops"][0]["product_link_regex"],
+            "link_id_regex": CONFIG["shops"][0]["link_id_regex"], "link_ignore_query": True,
+            "condition_from_url": CONFIG["shops"][0]["condition_from_url"]}
+    IS, OOS = "https://schema.org/InStock", "https://schema.org/OutOfStock"
+    pages = {
+        # Startseite: Mitternacht (Sehr gut), Polarstern, Mitternacht 15" ausverkauft
+        base: _variant_page([("100", "Mitternacht", "100b", 1290, IS), ("200", "Polarstern", "200", 1250, IS),
+                             ("300", "Mitternacht", "300aa", 0, OOS)], "100b", ["200", "200c"]),
+        base + "100b/": _variant_page([("100", "Mitternacht", "100b", 1290, IS)], "100b", ["100", "100c", "200c"]),
+        base + "100/": _variant_page([("100", "Mitternacht", "100", 1350, IS)], "100", []),
+        base + "100c/": _variant_page([("100", "Mitternacht", "100c", 1079, IS)], "100c", []),
+        base + "300aa/": _variant_page([("300", "Mitternacht", "300aa", 0, OOS)], "300aa", ["300c"]),
+        base + "300c/": _variant_page([("300", "Mitternacht", "300c", 1099, IS)], "300c", []),
+    }
+    fetcher = FakeFetcher(pages)
+    res = crawl_shop(shop, fetcher, list(WATCHES.values()))
+    assert res.complete, res.errors
+    assert not any("/200" in u for u in fetcher.calls)  # Polarstern wird nie geladen
+    assert len(fetcher.calls) == len(set(fetcher.calls))
+    found = {(o.sku, o.condition, o.price) for w, o in match_offers(res.offers, [MAC])}
+    assert ("100", "Gut", 1079.0) in found and ("100", "Exzellent", 1350.0) in found
+    assert ("100", "Sehr gut", 1290.0) in found and ("300", "Gut", 1099.0) in found
+    assert not any(o.price == 0 for o in res.offers)
+
+
+def test_crawl_respects_page_cap():
+    base = "https://www.refurbed.de/p/apple-macbook-air-m4-2025/"
+    many = [(str(i), "Mitternacht", str(i), 1200 + i, "InStock") for i in range(100, 130)]
+    shop = {"id": "refurbed", "start_urls": [base], "max_product_pages": 5, "link_ignore_query": True,
+            "product_link_regex": CONFIG["shops"][0]["product_link_regex"],
+            "link_id_regex": CONFIG["shops"][0]["link_id_regex"]}
+    fetcher = FakeFetcher({base: _variant_page(many, "100", [])} |
+                          {f"{base}{i}/": _variant_page(many, str(i), []) for i in range(100, 130)})
+    res = crawl_shop(shop, fetcher, [MAC])
+    assert res.pages == 6 and res.complete

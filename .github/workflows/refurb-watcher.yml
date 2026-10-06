@@ -2,16 +2,23 @@ name: refurb-watcher
 
 on:
   schedule:
-    - cron: "17 5-21/2 * * *"   # alle 2 Stunden zwischen ca. 7 und 23 Uhr (MESZ)
+    - cron: "17 5-20/3 * * *"   # alle 3 Stunden, ca. 7–22 Uhr (MESZ)
   workflow_dispatch:
     inputs:
       test_notify:
         description: "Nur eine Testnachricht senden (nicht crawlen)"
         type: boolean
         default: false
+      debug:
+        description: "Debug: geladene Seiten als Artefakt speichern, nichts committen/benachrichtigen"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
+
+env:
+  TZ: Europe/Berlin
 
 concurrency:
   group: refurb-watcher
@@ -35,12 +42,21 @@ jobs:
 
       - run: pip install -r requirements-dev.txt
 
+      # Browser nur installieren, wenn ein aktiver Shop "fetcher: playwright" nutzt
+      - name: Browser installieren (falls nötig)
+        run: |
+          if python -c "import yaml,sys; c=yaml.safe_load(open('config.yaml')); sys.exit(0 if any(s.get('enabled',True) and s.get('fetcher')=='playwright' for s in c['shops']) else 1)"; then
+            pip install playwright && python -m playwright install --with-deps chromium
+          fi
+
       - run: python -m pytest -q
 
       - name: Crawlen & benachrichtigen
         run: |
           if [ "${{ inputs.test_notify }}" = "true" ]; then
             python -m refurb_watcher test-notify
+          elif [ "${{ inputs.debug }}" = "true" ]; then
+            DEBUG_HTML_DIR=debug-html python -m refurb_watcher -v run --dry-run
           else
             python -m refurb_watcher run
           fi
@@ -53,8 +69,19 @@ jobs:
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
 
+      - name: Debug-Seiten im Branch refurb-watcher-debug ablegen
+        if: always() && inputs.debug
+        run: |
+          cp reports/latest.md debug-html/ 2>/dev/null || true
+          cd debug-html
+          git init -q -b refurb-watcher-debug
+          git add .
+          git -c user.name="refurb-watcher[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -qm "Debug-Seiten $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" refurb-watcher-debug
+
       - name: Zustand & Bericht committen
-        if: always()
+        if: always() && !inputs.debug
         run: |
           git config user.name "refurb-watcher[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -1,5 +1,7 @@
 import logging
+import os
 import random
+import re
 import time
 from urllib.parse import urlparse
 from urllib.robotparser import RobotFileParser
@@ -18,6 +20,17 @@ HEADERS = {
 
 class FetchError(Exception):
     pass
+
+
+def _dump(url: str, html: str, status: int | str):
+    """Mit DEBUG_HTML_DIR=pfad werden alle geladenen Seiten gespeichert (zum Nachjustieren)."""
+    folder = os.environ.get("DEBUG_HTML_DIR")
+    if not folder:
+        return
+    os.makedirs(folder, exist_ok=True)
+    name = re.sub(r"[^A-Za-z0-9]+", "_", url.split("://", 1)[-1]).strip("_")[:150]
+    with open(os.path.join(folder, f"{name}__{status}.html"), "w", encoding="utf-8") as f:
+        f.write(html)
 
 
 class Fetcher:
@@ -74,6 +87,7 @@ class Fetcher:
             except requests.RequestException as e:
                 last = str(e)
                 continue
+            _dump(url, r.text, r.status_code)
             if r.status_code == 200:
                 return r.text
             last = f"HTTP {r.status_code}"
@@ -93,12 +107,17 @@ class Fetcher:
         self._wait()
         page = self._browser.new_page(locale="de-DE", user_agent=HEADERS["User-Agent"])
         try:
-            page.goto(url, timeout=self.timeout * 1000, wait_until="networkidle")
-            return page.content()
+            resp = page.goto(url, timeout=self.timeout * 1000, wait_until="domcontentloaded")
+            page.wait_for_timeout(3000)  # nachladende Inhalte / Bot-Check abwarten
+            html, status = page.content(), resp.status if resp else 0
         except Exception as e:  # noqa: BLE001 – Playwright wirft eigene Typen
             raise FetchError(f"{url}: {e}") from e
         finally:
             page.close()
+        _dump(url, html, status)
+        if status >= 400:
+            raise FetchError(f"{url}: HTTP {status} (Browser)")
+        return html
 
     def close(self):
         if self._browser:
