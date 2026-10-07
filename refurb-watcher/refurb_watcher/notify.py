@@ -19,6 +19,16 @@ import requests
 log = logging.getLogger(__name__)
 
 
+Section = tuple[str, list[tuple[str, str]]]  # (Überschrift, [(Linktext, URL), ...])
+
+
+def _plain(body: str, sections: list[Section]) -> str:
+    parts = [body] if body else []
+    for heading, links in sections:
+        parts.append("\n".join([heading] + [f"• {label}\n  {url}" for label, url in links]))
+    return "\n\n".join(parts)
+
+
 def _ntfy(title: str, body: str, url: str | None, priority: str):
     topic = os.environ.get("NTFY_TOPIC")
     if not topic:
@@ -33,16 +43,23 @@ def _ntfy(title: str, body: str, url: str | None, priority: str):
     return True
 
 
-def _telegram(title: str, body: str, url: str | None):
+def _telegram(title: str, body: str, url: str | None, sections: list[Section]):
     token, chat = os.environ.get("TELEGRAM_BOT_TOKEN"), os.environ.get("TELEGRAM_CHAT_ID")
     if not (token and chat):
         return False
     # HTML statt Markdown: Produkttitel/URLs mit _ * [ würden Markdown-Parsing sprengen
-    text = f"<b>{html.escape(title)}</b>\n{html.escape(body)}"
+    text = f"<b>{html.escape(title)}</b>"
+    if body:
+        text += f"\n{html.escape(body)}"
     if url:
         text += f'\n<a href="{html.escape(url, quote=True)}">Zum Angebot</a>'
+    for heading, links in sections:
+        text += f"\n\n<b>{html.escape(heading)}</b>"
+        for label, link in links:
+            text += f'\n• <a href="{html.escape(link, quote=True)}">{html.escape(label)}</a>'
     r = requests.post(f"https://api.telegram.org/bot{token}/sendMessage",
-                      json={"chat_id": chat, "text": text, "parse_mode": "HTML"}, timeout=20)
+                      json={"chat_id": chat, "text": text, "parse_mode": "HTML",
+                            "link_preview_options": {"is_disabled": bool(sections)}}, timeout=20)
     if not r.ok:
         raise RuntimeError(f"Telegram HTTP {r.status_code}: {r.text[:200]}")
     return True
@@ -65,15 +82,19 @@ def _mail(title: str, body: str, url: str | None):
     return True
 
 
-def send(title: str, body: str, url: str | None = None, priority: str = "default") -> bool:
+def send(title: str, body: str = "", url: str | None = None, priority: str = "default",
+         sections: list[Section] | None = None) -> bool:
+    sections = sections or []
+    plain = _plain(body, sections)
+    first = url or next((link for _, links in sections for _, link in links), None)
     sent = False
-    for name, fn in (("ntfy", lambda: _ntfy(title, body, url, priority)),
-                     ("telegram", lambda: _telegram(title, body, url)),
-                     ("mail", lambda: _mail(title, body, url))):
+    for name, fn in (("ntfy", lambda: _ntfy(title, plain, first, priority)),
+                     ("telegram", lambda: _telegram(title, body, url, sections)),
+                     ("mail", lambda: _mail(title, plain, url))):
         try:
             sent = fn() or sent
         except Exception as e:  # noqa: BLE001 – ein kaputter Kanal soll die anderen nicht blockieren
             log.error("Benachrichtigung über %s fehlgeschlagen: %s", name, e)
     if not sent:
-        log.warning("Kein Benachrichtigungskanal konfiguriert – Nachricht nur im Log: %s | %s", title, body)
+        log.warning("Kein Benachrichtigungskanal konfiguriert – Nachricht nur im Log: %s\n%s", title, plain)
     return sent

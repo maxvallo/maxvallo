@@ -51,6 +51,11 @@ class Store:
             json.dump(self.data, f, ensure_ascii=False, indent=1, sort_keys=True)
         os.replace(tmp, self.path)
 
+    def prune(self, watch_ids: set[str]):
+        """Einträge von Suchen entfernen, die es in der Konfiguration nicht mehr gibt."""
+        self.data["offers"] = {k: e for k, e in self.offers.items() if e["watch"] in watch_ids}
+        self.data["summary_best"] = {k: v for k, v in self.data.get("summary_best", {}).items() if k in watch_ids}
+
     def record_run(self, ts: str, shop_status: dict):
         self.data["runs"] = (self.data["runs"] + [{"ts": ts, "shops": shop_status}])[-MAX_RUNS:]
 
