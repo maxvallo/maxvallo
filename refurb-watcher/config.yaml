@@ -97,5 +97,8 @@ settings:
   respect_robots_txt: true
   # Zusätzlich zu Preisalarmen eine Sammelnachricht bei neuen Angeboten? (aus: nur Preisalarme)
   notify_new_offers: false
+  # Nach jedem Lauf eine Übersicht mit den günstigsten Angeboten je Suche senden
+  notify_summary: true
+  summary_top_n: 3
   # Angebote, die so viele Läufe in Folge fehlen, gelten als verschwunden.
   gone_after_missed_runs: 2

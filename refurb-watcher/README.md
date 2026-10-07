@@ -12,7 +12,8 @@ Shops: **refurbed.de** (aktiv). **asgoodasnew.de**, **backmarket.de** und **rebu
 Pro Lauf entstehen:
 - ein **Bericht** `reports/latest.md`: aktuelle Preise (günstigste zuerst), neue Angebote der letzten 7 Tage, Tiefstpreis seit Beobachtung, Änderungen seit dem letzten Lauf;
 - eine **Preis-Historie** `data/state.json` (wann ist welches Angebot aufgetaucht, verschwunden, billiger/teurer geworden);
-- **Telegram-Nachricht** nur, wenn ein Angebot die Preisgrenze unterschreitet (je Preisstufe einmal). Optional auch bei neuen Angeboten: `notify_new_offers: true` in `config.yaml`.
+- **Telegram-Übersicht nach jedem Lauf** (alle 3 h): je Suche die 3 günstigsten Angebote mit Preis, Zustand, Link und Veränderung zum letzten Lauf (`notify_summary`, `summary_top_n` in `config.yaml`).
+- **Telegram-Preisalarm** (hohe Priorität), sobald ein Angebot die Preisgrenze unterschreitet (je Preisstufe einmal). Optional auch bei neuen Angeboten: `notify_new_offers: true`.
 
 ## Konzept
 
