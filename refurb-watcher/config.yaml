@@ -8,14 +8,26 @@
 #   ausgelesen und Produktlinks (product_link_regex) eine Ebene tiefer verfolgt.
 
 watches:
-  - id: macbook-air-m4
-    name: 'MacBook Air M4 (2025) 13"/15" Mitternacht'
+  - id: macbook-air-m4-13
+    name: 'MacBook Air 13" M4 (2025) Mitternacht'
     alert_below: 1100
     require:
       - ["macbook air"]
       - ["m4"]
-      # Das M4-Air gibt es nur in 13" und 15" – daher keine Größen-Bedingung.
       - ["re:mitternacht|midnight"]
+      - ["re:\\b13(?:[.,]\\d)?\\s*(\"|''|zoll|inch)", "macbook air 13"]
+    exclude:
+      - "macbook pro"
+      - "re:\\bm4\\s+(pro|max)\\b"
+
+  - id: macbook-air-m4-15
+    name: 'MacBook Air 15" M4 (2025) Mitternacht'
+    alert_below: 1100
+    require:
+      - ["macbook air"]
+      - ["m4"]
+      - ["re:mitternacht|midnight"]
+      - ["re:\\b15(?:[.,]\\d)?\\s*(\"|''|zoll|inch)", "macbook air 15", "macbook air m4 2025 15"]
     exclude:
       - "macbook pro"
       - "re:\\bm4\\s+(pro|max)\\b"

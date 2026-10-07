@@ -4,7 +4,8 @@ Beobachtet Refurbished-Shops nach
 
 | Suche | Alarm |
 |---|---|
-| **MacBook Air M4 (2025)**, 13" oder 15", Farbe **Mitternacht** | unter **1.100 €** |
+| **MacBook Air 13" M4 (2025)**, Farbe **Mitternacht** | unter **1.100 €** |
+| **MacBook Air 15" M4 (2025)**, Farbe **Mitternacht** | unter **1.100 €** |
 | **iPad Air 11" M3 (2025)**, beliebige Farbe/Speicher | unter **500 €** |
 
 Shops: **refurbed.de** (aktiv). **asgoodasnew.de**, **backmarket.de** und **rebuy.de** sind vorbereitet, aber abgeschaltet – siehe *Stand / Einschränkungen*.
@@ -12,7 +13,7 @@ Shops: **refurbed.de** (aktiv). **asgoodasnew.de**, **backmarket.de** und **rebu
 Pro Lauf entstehen:
 - ein **Bericht** `reports/latest.md`: aktuelle Preise (günstigste zuerst), neue Angebote der letzten 7 Tage, Tiefstpreis seit Beobachtung, Änderungen seit dem letzten Lauf;
 - eine **Preis-Historie** `data/state.json` (wann ist welches Angebot aufgetaucht, verschwunden, billiger/teurer geworden);
-- **Telegram-Übersicht nach jedem Lauf** (alle 3 h): je Suche die 3 günstigsten Angebote mit Preis, Zustand, Link und Veränderung zum letzten Lauf (`notify_summary`, `summary_top_n` in `config.yaml`).
+- **Telegram-Übersicht nach jedem Lauf** (alle 3 h): je Suche (MacBook Air 13", MacBook Air 15", iPad Air 11") die 3 günstigsten Angebote mit Preis, Zustand, Link und Veränderung zum letzten Lauf (`notify_summary`, `summary_top_n` in `config.yaml`).
 - **Telegram-Preisalarm** (hohe Priorität), sobald ein Angebot die Preisgrenze unterschreitet (je Preisstufe einmal). Optional auch bei neuen Angeboten: `notify_new_offers: true`.
 
 ## Konzept
@@ -47,7 +48,7 @@ Pro Lauf entstehen:
 
 Designentscheidungen:
 - **Keine shop-spezifischen CSS-Selektoren.** Die werden bei jedem Redesign kaputt. Stattdessen werden die strukturierten Produktdaten (JSON-LD) gelesen, die alle großen Shops für Suchmaschinen ausliefern. Neue Shops brauchen nur einen Eintrag in `config.yaml`.
-- **Baujahr 2025** wird über den Chip abgedeckt: Das MacBook Air mit M4 und das iPad Air mit M3 gibt es nur als 2025er-Modelle. Größe beim MacBook ist egal, weil das M4-Air ausschließlich in 13" und 15" existiert.
+- **Baujahr 2025** wird über den Chip abgedeckt: Das MacBook Air mit M4 und das iPad Air mit M3 gibt es nur als 2025er-Modelle. 13" und 15" sind getrennte Suchen, damit Übersicht und Alarme je Größe kommen.
 - **„Weg"-Erkennung** nur, wenn ein Shop fehlerfrei gecrawlt wurde und das Angebot 2 Läufe in Folge fehlt – ein Timeout erzeugt also keine Fehlalarme.
 - **Zustand als JSON im Git-Repo:** kein Server, keine Datenbank, Historie über Git-Commits nachvollziehbar, Bericht direkt auf GitHub lesbar.
 

@@ -44,6 +44,7 @@ def cmd_run(cfg: dict, args) -> int:
     finally:
         fetcher.close()
 
+    store.prune({w.id for w in watches})
     result = store.apply(ts, matched, complete, gone_after=settings.get("gone_after_missed_runs", 2))
     store.record_run(ts, status)
 
