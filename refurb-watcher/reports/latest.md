@@ -1,8 +1,8 @@
-# Refurb-Watcher – Stand 21.10.2026 18:00
+# Refurb-Watcher – Stand 21.10.2026 22:41
 
 | Shop | Seiten | Angebote gelesen | Status |
 |---|---|---|---|
-| refurbed | 51 | 476 | ✅ |
+| refurbed | 51 | 479 | ✅ |
 
 ## MacBook Air M4 (2025) 13"/15" Mitternacht
 
@@ -11,11 +11,11 @@ Aktive Angebote: **7** · günstigstes jetzt: **1.239,76 €** · Tiefstpreis se
 | Preis | Shop | Angebot | seit |
 |---:|---|---|---|
 | 1.239,76 € | refurbed | [Apple MacBook Air 2025 \| 13.6" \| M4 - Mitternacht 256 GB · Zustand: Premium](https://www.refurbed.de/p/apple-macbook-air-m4-2025/307979aa/?offer=21281329) | 16.10. |
+| 1.293,75 € | refurbed | [Apple MacBook Air 2025 \| 13.6" \| M4 - Mitternacht 256 GB · Zustand: Sehr gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/307979b/?offer=21281366) | 06.10. |
 | 1.435,00 € | refurbed | [Apple MacBook Air 2025 \| 13.6" \| M4 - Mitternacht 512 GB · Zustand: Gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/308039c/?offer=21413597) | 07.10. |
 | 1.453,86 € | refurbed | [Apple MacBook Air 2025 \| 13.6" \| M4 - Mitternacht 1000 GB · Zustand: Gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/308065c/?offer=21392636) | 06.10. |
 | 1.499,00 € | refurbed | [Apple MacBook Air 2025 \| 15.3" \| M4 - Mitternacht 256 GB · Zustand: Exzellent](https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/308510/?offer=20770377) | 08.10. |
 | 1.519,00 € | refurbed | [Apple MacBook Air 2025 \| 15.3" \| M4 - Mitternacht 512 GB · Zustand: Exzellent](https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/308536/?offer=20486598) | 07.10. |
-| 1.781,79 € | refurbed | [Apple MacBook Air 2025 \| 15.3" \| M4 - Mitternacht 1000 GB · Zustand: Exzellent](https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/308596/?offer=21421364) | 08.10. |
 | 1.849,00 € | refurbed | [Apple MacBook Air 2025 \| 13.6" \| M4 - Mitternacht 1000 GB · Zustand: Sehr gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/308220b/?offer=21499339) | 14.10. |
 
 **Neu in den letzten 7 Tagen:**
@@ -29,7 +29,7 @@ Aktive Angebote: **7** · günstigstes jetzt: **1.239,76 €** · Tiefstpreis se
 
 ## iPad Air 11" M3 (2025)
 
-Aktive Angebote: **31** · günstigstes jetzt: **559,00 €** · Tiefstpreis seit Beobachtung: 520,36 € · Alarm unter 500,00 €
+Aktive Angebote: **30** · günstigstes jetzt: **559,00 €** · Tiefstpreis seit Beobachtung: 520,36 € · Alarm unter 500,00 €
 
 | Preis | Shop | Angebot | seit |
 |---:|---|---|---|
@@ -45,7 +45,7 @@ Aktive Angebote: **31** · günstigstes jetzt: **559,00 €** · Tiefstpreis sei
 | 650,99 € | refurbed | [iPad Air (2025) \| 11" - Polarstern 128 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307902/?offer=17519670) | 06.10. |
 | 650,99 € | refurbed | [iPad Air (2025) \| 11" - blau 128 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307905/?offer=20790369) | 06.10. |
 | 660,99 € | refurbed | [iPad Air (2025) \| 11" - Polarstern 128 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307902aa/?offer=20922091) | 06.10. |
-| 668,99 € | refurbed | [iPad Air (2025) \| 11" - spacegrau 128 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307900/?offer=20790365) | 06.10. |
+| 668,99 € | refurbed | [iPad Air (2025) \| 11" - spacegrau 128 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307900/?offer=21518197) | 06.10. |
 | 669,99 € | refurbed | [iPad Air (2025) \| 11" - spacegrau 128 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307900aa/?offer=20790366) | 06.10. |
 | 670,99 € | refurbed | [iPad Air (2025) \| 11" - violett 128 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307903aa/?offer=21043156) | 06.10. |
 
@@ -66,21 +66,6 @@ Aktive Angebote: **31** · günstigstes jetzt: **559,00 €** · Tiefstpreis sei
 
 ## Änderungen im letzten Lauf
 
-- 📈 teurer: 668,99 € (vorher 648,99 €) – refurbed – [iPad Air (2025) | 11" - spacegrau 128 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307900/?offer=20790365)
-- 🔁 wieder da: 801,99 € – refurbed – [iPad Air (2025) | 11" - violett 256 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307910/?offer=21555120)
-- 📈 teurer: 801,99 € (vorher 774,99 €) – refurbed – [iPad Air (2025) | 11" - violett 256 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307910/?offer=21555120)
-- 📈 teurer: 810,99 € (vorher 799,00 €) – refurbed – [iPad Air (2025) | 11" - Polarstern 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307909aa/?offer=21551596)
-- 📉 günstiger: 670,99 € (vorher 685,99 €) – refurbed – [iPad Air (2025) | 11" - blau 128 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307905aa/?offer=21551044)
-- 📈 teurer: 810,99 € (vorher 807,99 €) – refurbed – [iPad Air (2025) | 11" - spacegrau 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307906aa/?offer=21551599)
-- 📈 teurer: 810,99 € (vorher 799,00 €) – refurbed – [iPad Air (2025) | 11" - blau 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307907aa/?offer=21551597)
-- 📈 teurer: 810,99 € (vorher 799,00 €) – refurbed – [iPad Air (2025) | 11" - violett 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307910aa/?offer=21551600)
-- 📈 teurer: 680,99 € (vorher 670,99 €) – refurbed – [iPad Air (2025) | 11" - spacegrau 256 GB · Zustand: Gut](https://www.refurbed.de/p/ipad-air-7-2025-11/307924c/?offer=20615740)
-- 🆕 neu: 611,99 € – refurbed – [iPad Air (2025) | 11" - Polarstern 128 GB · Zustand: Gut](https://www.refurbed.de/p/ipad-air-7-2025-11/307930c/?offer=21555118)
-- 📉 günstiger: 861,34 € (vorher 870,99 €) – refurbed – [iPad Air (2025) | 11" - blau 256 GB · Zustand: Sehr gut](https://www.refurbed.de/p/ipad-air-7-2025-11/307931b/?offer=21377198)
-- ❌ weg: 761,99 € – refurbed – [iPad Air (2025) | 11" - spacegrau 256 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307906/?offer=20790384)
-- ❌ weg: 731,99 € – refurbed – [iPad Air (2025) | 11" - spacegrau 256 GB · Zustand: Sehr gut](https://www.refurbed.de/p/ipad-air-7-2025-11/307906b/?offer=20855525)
-- ❌ weg: 731,99 € – refurbed – [iPad Air (2025) | 11" - violett 256 GB · Zustand: Exzellent](https://www.refurbed.de/p/ipad-air-7-2025-11/307928/?offer=20936710)
-- ❌ weg: 740,99 € – refurbed – [iPad Air (2025) | 11" - violett 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307928aa/?offer=18034467)
-- ❌ weg: 750,99 € – refurbed – [iPad Air (2025) | 11" - blau 256 GB · Zustand: Premium](https://www.refurbed.de/p/ipad-air-7-2025-11/307931aa/?offer=18032070)
-- ❌ weg: 1.293,75 € – refurbed – [Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB · Zustand: Sehr gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/307979b/?offer=21281366)
-- ❌ weg: 1.510,95 € – refurbed – [Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 512 GB · Zustand: Exzellent](https://www.refurbed.de/p/apple-macbook-air-m4-2025/308326/?offer=21450705)
+- 🔁 wieder da: 1.293,75 € – refurbed – [Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB · Zustand: Sehr gut](https://www.refurbed.de/p/apple-macbook-air-m4-2025/307979b/?offer=21281366)
+- ❌ weg: 700,99 € – refurbed – [iPad Air (2025) | 11" - blau 256 GB · Zustand: Gut](https://www.refurbed.de/p/ipad-air-7-2025-11/307931c/?offer=21386112)
+- ❌ weg: 1.781,79 € – refurbed – [Apple MacBook Air 2025 | 15.3" | M4 - Mitternacht 1000 GB · Zustand: Exzellent](https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/308596/?offer=21421364)
