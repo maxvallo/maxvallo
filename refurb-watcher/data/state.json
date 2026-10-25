@@ -168,7 +168,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 643.99,
    "missed": 0,
    "price": 666.99,
@@ -180,7 +180,7 @@
    "watch": "ipad-air-11-m3"
   },
   "ipad-air-11-m3::refurbed|307900|Gut|spacegrau|": {
-   "active": false,
+   "active": true,
    "color": "spacegrau",
    "condition": "Gut",
    "first_seen": "2026-10-09T19:33:01+00:00",
@@ -205,13 +205,17 @@
     [
      "2026-10-22T15:53:12+00:00",
      739.99
+    ],
+    [
+     "2026-10-25T19:38:14+00:00",
+     728.46
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-22T20:34:06+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 599.0,
-   "missed": 2,
-   "price": 739.99,
+   "missed": 0,
+   "price": 728.46,
    "price_is_from": false,
    "seller": "",
    "shop": "refurbed",
@@ -367,7 +371,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 659.99,
    "missed": 0,
    "price": 667.99,
@@ -539,18 +543,22 @@
     [
      "2026-10-22T15:53:12+00:00",
      650.99
+    ],
+    [
+     "2026-10-25T19:38:14+00:00",
+     649.99
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 630.99,
    "missed": 0,
-   "price": 650.99,
+   "price": 649.99,
    "price_is_from": false,
    "seller": "",
    "shop": "refurbed",
    "title": "iPad Air (2025) | 11\" - spacegrau 128 GB",
-   "url": "https://www.refurbed.de/p/ipad-air-7-2025-11/307900b/?offer=21569993",
+   "url": "https://www.refurbed.de/p/ipad-air-7-2025-11/307900b/?offer=21455164",
    "watch": "ipad-air-11-m3"
   },
   "ipad-air-11-m3::refurbed|307901|Gut|spacegrau|": {
@@ -644,7 +652,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T14:57:25+00:00",
    "min_price": 559.0,
-   "missed": 0,
+   "missed": 1,
    "price": 559.0,
    "price_is_from": false,
    "seller": "",
@@ -790,7 +798,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 520.36,
    "missed": 0,
    "price": 650.99,
@@ -1030,7 +1038,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 629.99,
    "missed": 0,
    "price": 660.99,
@@ -1158,7 +1166,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 579.99,
    "missed": 0,
    "price": 630.99,
@@ -1293,7 +1301,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 599.0,
    "missed": 0,
    "price": 610.99,
@@ -1421,7 +1429,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 549.0,
    "missed": 0,
    "price": 580.99,
@@ -1576,7 +1584,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 609.99,
    "missed": 0,
    "price": 670.99,
@@ -1727,7 +1735,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 579.99,
    "missed": 0,
    "price": 590.99,
@@ -1931,7 +1939,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 639.99,
    "missed": 0,
    "price": 650.99,
@@ -2118,7 +2126,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 669.99,
    "missed": 0,
    "price": 669.99,
@@ -2458,7 +2466,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 730.99,
    "missed": 0,
    "price": 810.99,
@@ -2585,7 +2593,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 987.99,
    "missed": 0,
    "price": 987.99,
@@ -2669,7 +2677,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 750.99,
    "missed": 0,
    "price": 810.99,
@@ -2800,7 +2808,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 799.0,
    "missed": 0,
    "price": 810.99,
@@ -2812,11 +2820,11 @@
    "watch": "ipad-air-11-m3"
   },
   "ipad-air-11-m3::refurbed|307910|Exzellent|violett|": {
-   "active": true,
+   "active": false,
    "color": "violett",
    "condition": "Exzellent",
    "first_seen": "2026-10-06T18:44:34+00:00",
-   "gone_since": "2026-10-22T15:53:12+00:00",
+   "gone_since": "2026-10-25T19:38:14+00:00",
    "history": [
     [
      "2026-10-06T18:44:34+00:00",
@@ -2866,7 +2874,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T09:49:40+00:00",
    "min_price": 749.99,
-   "missed": 1,
+   "missed": 2,
    "price": 760.99,
    "price_is_from": false,
    "seller": "",
@@ -3056,7 +3064,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 752.99,
    "missed": 0,
    "price": 810.99,
@@ -3163,7 +3171,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1065.99,
    "missed": 0,
    "price": 1065.99,
@@ -4054,7 +4062,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1055.99,
    "missed": 0,
    "price": 1055.99,
@@ -4598,7 +4606,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 870.99,
    "missed": 0,
    "price": 910.99,
@@ -4850,7 +4858,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 679.99,
    "missed": 0,
    "price": 851.99,
@@ -5582,7 +5590,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 560.99,
    "missed": 0,
    "price": 590.99,
@@ -5710,7 +5718,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 579.99,
    "missed": 0,
    "price": 590.99,
@@ -6217,7 +6225,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1239.76,
    "missed": 0,
    "price": 1239.76,
@@ -6265,7 +6273,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1293.75,
    "missed": 0,
    "price": 1293.75,
@@ -6293,7 +6301,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1150.0,
    "missed": 0,
    "price": 1309.0,
@@ -6319,7 +6327,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T14:57:25+00:00",
    "min_price": 1179.0,
-   "missed": 0,
+   "missed": 1,
    "price": 1179.0,
    "price_is_from": false,
    "seller": "",
@@ -6581,7 +6589,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1435.0,
    "missed": 0,
    "price": 1435.0,
@@ -6651,7 +6659,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T14:57:25+00:00",
    "min_price": 1453.86,
-   "missed": 0,
+   "missed": 1,
    "price": 1453.86,
    "price_is_from": false,
    "seller": "",
@@ -6752,7 +6760,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1849.0,
    "missed": 0,
    "price": 1849.0,
@@ -6815,7 +6823,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1294.99,
    "missed": 0,
    "price": 1394.07,
@@ -6827,7 +6835,7 @@
    "watch": "macbook-air-m4"
   },
   "macbook-air-m4::refurbed|308510|Sehr gut|Mitternacht|": {
-   "active": false,
+   "active": true,
    "color": "Mitternacht",
    "condition": "Sehr gut",
    "first_seen": "2026-10-14T10:14:44+00:00",
@@ -6847,9 +6855,9 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-24T14:34:16+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1301.07,
-   "missed": 2,
+   "missed": 0,
    "price": 1486.07,
    "price_is_from": false,
    "seller": "",
@@ -6901,7 +6909,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T14:57:25+00:00",
    "min_price": 1261.73,
-   "missed": 0,
+   "missed": 1,
    "price": 1261.73,
    "price_is_from": false,
    "seller": "",
@@ -7074,7 +7082,7 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-25T14:57:25+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1613.0,
    "missed": 0,
    "price": 1613.0,
@@ -7176,7 +7184,7 @@
    "last_alert_price": null,
    "last_seen": "2026-10-25T14:57:25+00:00",
    "min_price": 1789.0,
-   "missed": 0,
+   "missed": 1,
    "price": 1799.0,
    "price_is_from": false,
    "seller": "",
@@ -7186,7 +7194,7 @@
    "watch": "macbook-air-m4"
   },
   "macbook-air-m4::refurbed|308844|Sehr gut|Mitternacht|": {
-   "active": false,
+   "active": true,
    "color": "Mitternacht",
    "condition": "Sehr gut",
    "first_seen": "2026-10-24T09:33:06+00:00",
@@ -7198,9 +7206,9 @@
     ]
    ],
    "last_alert_price": null,
-   "last_seen": "2026-10-24T14:34:16+00:00",
+   "last_seen": "2026-10-25T19:38:14+00:00",
    "min_price": 1843.95,
-   "missed": 2,
+   "missed": 0,
    "price": 1843.95,
    "price_is_from": false,
    "seller": "",
@@ -7985,6 +7993,17 @@
     }
    },
    "ts": "2026-10-25T14:57:25+00:00"
+  },
+  {
+   "shops": {
+    "refurbed": {
+     "complete": true,
+     "errors": [],
+     "offers": 333,
+     "pages": 41
+    }
+   },
+   "ts": "2026-10-25T19:38:14+00:00"
   }
  ]
 }
