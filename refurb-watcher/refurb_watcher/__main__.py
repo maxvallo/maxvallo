@@ -12,7 +12,7 @@ from .crawler import crawl_shop, match_offers
 from .extract import extract_page
 from .fetch import Fetcher
 from .matching import Watch
-from .report import build_report, describe, eur, price_str
+from .report import build_report, build_summary, describe, eur, price_str
 from .store import Store, now_iso
 
 log = logging.getLogger("refurb_watcher")
@@ -44,6 +44,7 @@ def cmd_run(cfg: dict, args) -> int:
     finally:
         fetcher.close()
 
+    store.prune({w.id for w in watches})
     result = store.apply(ts, matched, complete, gone_after=settings.get("gone_after_missed_runs", 2))
     store.record_run(ts, status)
 
@@ -62,6 +63,9 @@ def cmd_run(cfg: dict, args) -> int:
             if len(new) > 8:
                 body += f"\n… und {len(new) - 8} weitere"
             notify.send(f"🆕 {len(new)} neue Angebote", body, url=new[0].entry["url"])
+        if settings.get("notify_summary", False):
+            title, sections = build_summary(store, watches, status, settings.get("summary_top_n", 3))
+            notify.send(title, sections=sections, priority="low")
 
     store.save()
     report = build_report(store, watches, result.events)

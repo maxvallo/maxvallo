@@ -15,7 +15,7 @@ HERE = pathlib.Path(__file__).parent
 FIX = HERE / "fixtures"
 CONFIG = yaml.safe_load((HERE.parent / "config.yaml").read_text(encoding="utf-8"))
 WATCHES = {w["id"]: Watch.from_config(w) for w in CONFIG["watches"]}
-MAC, IPAD = WATCHES["macbook-air-m4"], WATCHES["ipad-air-11-m3"]
+MAC, MAC15, IPAD = WATCHES["macbook-air-m4-13"], WATCHES["macbook-air-m4-15"], WATCHES["ipad-air-11-m3"]
 
 
 def fixture(name):
@@ -34,16 +34,21 @@ def offer(title, price=900.0, **kw):
     return Offer(shop="t", url=kw.pop("url", "https://x/p/1"), title=title, price=price, **kw)
 
 
-@pytest.mark.parametrize("title,color,hit", [
-    ('Apple MacBook Air 13,6" M4 (2025) 16 GB 256 GB', "Mitternacht", True),
-    ("MacBook Air 15 Zoll M4 2025 Midnight", "", True),
-    ("MacBook Air M4 2025 16GB", "Polarstern", False),
-    ("MacBook Air M3 2024 Mitternacht", "", False),
-    ("MacBook Pro 14 M4 Mitternacht", "", False),
-    ("MacBook Air M4 Mitternachtsblau", "", True),
+@pytest.mark.parametrize("title,color,url,expected", [
+    ('Apple MacBook Air 13,6" M4 (2025) 16 GB 256 GB', "Mitternacht", "https://x/p/1", "macbook-air-m4-13"),
+    ('Apple MacBook Air 2025 | 15.3" | M4 - Mitternacht 256 GB', "", "https://x/p/1", "macbook-air-m4-15"),
+    ("MacBook Air 15 Zoll M4 2025 Midnight", "", "https://x/p/1", "macbook-air-m4-15"),
+    ("MacBook Air 13 M4 2025 Mitternacht", "", "https://x/p/1", "macbook-air-m4-13"),
+    ("Apple MacBook Air M4 - Mitternacht 512 GB", "", "https://www.refurbed.de/p/apple-macbook-air-m4-2025-15/1/",
+     "macbook-air-m4-15"),
+    ('MacBook Air 13" M4 2025 16GB', "Polarstern", "https://x/p/1", None),
+    ('MacBook Air 13" M3 2024 Mitternacht', "", "https://x/p/1", None),
+    ('MacBook Pro 14" M4 Mitternacht', "", "https://x/p/1", None),
+    ('MacBook Air 15" M4 Mitternachtsblau', "", "https://x/p/1", "macbook-air-m4-15"),
 ])
-def test_macbook_matching(title, color, hit):
-    assert MAC.matches(offer(title, color=color)) is hit
+def test_macbook_matching(title, color, url, expected):
+    hits = [w.id for w in WATCHES.values() if w.matches(offer(title, color=color, url=url))]
+    assert hits == ([expected] if expected else [])
 
 
 @pytest.mark.parametrize("title,url,hit", [
@@ -171,6 +176,8 @@ def test_cli_run_end_to_end(tmp_path, monkeypatch, capsys):
     titles = [a[0] for a, _ in sent]
     assert any("969,00 €" in t for t in titles)          # Alarm < 1100
     assert not any("1.129,00" in t for t in titles)       # über Schwelle -> kein Alarm
+    summary = [kw for a, kw in sent if a[0] == "📊 Günstigste Angebote"]
+    assert len(summary) == 1 and "ab 969,00 €" in summary[0]["sections"][0][0]
     report = (tmp_path / "latest.md").read_text(encoding="utf-8")
     assert "969,00 €" in report and "MacBook Air M4" in report
     assert os.path.exists(tmp_path / "state.json")
@@ -277,3 +284,57 @@ def test_crawl_respects_page_cap():
                           {f"{base}{i}/": _variant_page(many, str(i), []) for i in range(100, 130)})
     res = crawl_shop(shop, fetcher, [MAC])
     assert res.pages == 6 and res.complete
+
+
+def test_summary_lists_cheapest_and_change(tmp_path):
+    from refurb_watcher.report import build_summary
+    store = Store(str(tmp_path / "s.json"))
+    t = 'Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB'
+    offers = [offer(t, p, sku=str(i), condition=c, url=f"https://r/p/{i}")
+              for i, (p, c) in enumerate([(1235.70, "Gut"), (1293.75, "Sehr gut"), (1459.0, "Exzellent"),
+                                          (1500.0, "Premium")])]
+    store.apply("2026-01-01T00:00:00+00:00", [(MAC, o) for o in offers], {"t"})
+    title, sections = build_summary(store, [MAC, IPAD], {"t": {"complete": True}})
+    assert title == "📊 Günstigste Angebote"
+    (head, links), (ipad_head, ipad_links) = sections
+    assert head.startswith(MAC.name + ": ab 1.235,70 €") and "↓" not in head
+    assert [l for l, _ in links] == ['1.235,70 € · Gut · 13.6" Mitternacht 256 GB',
+                                     '1.293,75 € · Sehr gut · 13.6" Mitternacht 256 GB',
+                                     '1.459,00 € · Exzellent · 13.6" Mitternacht 256 GB']
+    assert links[0][1] == "https://r/p/0"
+    assert ipad_head.endswith("keine Angebote") and ipad_links == []
+
+    offers[0].price = 1089.0
+    store.apply("2026-01-01T03:00:00+00:00", [(MAC, o) for o in offers], {"t"})
+    _, sections = build_summary(store, [MAC], {"t": {"complete": False}})
+    assert "ab 1.089,00 € (↓ 146,70 €)" in sections[0][0]
+    assert sections[0][1][0][0].startswith("🔔 1.089,00 €")
+    assert sections[-1][0].startswith("⚠️ Nicht vollständig gelesen: t")
+
+
+def test_telegram_sections_render_links(monkeypatch):
+    from refurb_watcher import notify
+    calls = []
+
+    class Resp:
+        ok, status_code, text = True, 200, ""
+
+    monkeypatch.setattr(notify.requests, "post", lambda url, json, timeout: calls.append(json) or Resp())
+    for var in ("NTFY_TOPIC", "SMTP_HOST", "MAIL_TO"):
+        monkeypatch.delenv(var, raising=False)
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "t")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "1")
+    notify.send("📊 Günstigste Angebote", sections=[("MacBook: ab 1.235,70 €", [("1.235,70 € · Gut", "https://r/p/1?a=1&b=2")])])
+    text = calls[0]["text"]
+    assert text.startswith("<b>📊 Günstigste Angebote</b>\n\n<b>MacBook: ab 1.235,70 €</b>")
+    assert '• <a href="https://r/p/1?a=1&amp;b=2">1.235,70 € · Gut</a>' in text
+    assert calls[0]["link_preview_options"] == {"is_disabled": True}
+
+
+def test_prune_removes_entries_of_removed_watches(tmp_path):
+    store = Store(str(tmp_path / "s.json"))
+    store.apply("2026-01-01T00:00:00+00:00", [(MAC, offer('MacBook Air 13" M4 Mitternacht', sku="A")),
+                                              (IPAD, offer('iPad Air 11" M3', 600, sku="B"))], {"t"})
+    store.data["summary_best"] = {MAC.id: 900.0, "alt": 1.0}
+    store.prune({IPAD.id})
+    assert [e["watch"] for e in store.offers.values()] == [IPAD.id] and store.data["summary_best"] == {}

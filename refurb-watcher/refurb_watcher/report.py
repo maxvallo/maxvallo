@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta, timezone
 
 from .matching import Watch
@@ -83,3 +84,50 @@ def build_report(store: Store, watches: list[Watch], events: list[Event] | None 
                          f"{ev.entry['shop']} – [{describe(ev.entry)}]({ev.entry['url']})")
         lines.append("")
     return "\n".join(lines)
+
+
+def short_title(e: dict) -> str:
+    """'Apple MacBook Air 2025 | 13.6" | M4 - Mitternacht 256 GB' -> '13.6" Mitternacht 256 GB'"""
+    title = e.get("title", "")
+    if " - " not in title:
+        return title[:60]
+    head, variant = title.rsplit(" - ", 1)
+    inch = re.search(r'(\d{2}(?:[.,]\d)?)\s*(?:"|zoll|inch)', head, re.I)
+    return f'{inch.group(1)}" {variant}' if inch else variant
+
+
+def build_summary(store: Store, watches: list[Watch], shop_status: dict,
+                  top_n: int = 3) -> tuple[str, list[tuple[str, list[tuple[str, str]]]]]:
+    """Kurzübersicht für Telegram: je Suche die günstigsten aktiven Angebote.
+
+    Merkt sich den günstigsten Preis je Suche, um beim nächsten Mal die Veränderung zu zeigen.
+    """
+    last = store.data.setdefault("summary_best", {})
+    sections = []
+    for w in watches:
+        active = sorted((e for e in store.offers.values() if e["watch"] == w.id and e.get("active", True)),
+                        key=lambda e: e["price"])
+        if not active:
+            sections.append((f"{w.name}: keine Angebote", []))
+            last.pop(w.id, None)
+            continue
+        best = active[0]["price"]
+        prev = last.get(w.id)
+        delta = ""
+        if prev is not None and abs(best - prev) >= 0.01:
+            delta = f" ({'↓' if best < prev else '↑'} {eur(abs(best - prev))})"
+        alarm = f" · Alarm < {eur(w.alert_below)}" if w.alert_below else ""
+        links = []
+        for e in active[:top_n]:
+            cond = CONDITION_DE.get(e.get("condition"), e.get("condition"))
+            flag = "🔔 " if w.alert_below and e["price"] < w.alert_below else ""
+            label = " · ".join(x for x in (f"{flag}{price_str(e)}", cond, short_title(e)) if x)
+            if len(shop_status) > 1:
+                label += f" ({e['shop']})"
+            links.append((label, e["url"]))
+        sections.append((f"{w.name}: ab {eur(best)}{delta}{alarm}", links))
+        last[w.id] = best
+    broken = [shop for shop, st in shop_status.items() if not st.get("complete")]
+    if broken:
+        sections.append((f"⚠️ Nicht vollständig gelesen: {', '.join(broken)} – Preise evtl. veraltet", []))
+    return "📊 Günstigste Angebote", sections
